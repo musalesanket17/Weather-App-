@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Netlify Link: https://calm-smakager-b8913b.netlify.app -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week data</title>
+    <style>
+        *{
+            background-color: rgb(29, 29, 29);
+            color: white;
+        }
+        #bord {
+
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: 50%;
+            justify-content: center;
+            margin: auto;
+            border: 1px solid white;
+        }
+
+        #test {
+
+            align-items: center;
+            /* border: 1px solid gold; */
+            margin: center;
+            width: 280px;
+            padding-top: 25px;
+            margin: auto;
+            padding-bottom: 15px;
+
+
+        }
+
+        #container {
+
+            text-align: center;
+            font-size: 20px;
+        }
+
+        #seven {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border: 1 px solid white;
+        }
+
+        #weekdata {
+            display: grid;
+            width: 90%;
+            grid-template-columns: repeat(7, 1fr);
+            margin: auto;
+            text-align: center;
+            padding-bottom: 50px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        #weekdata>div {
+            gap: 5px;
+            border: 1px solid white ;
+            background-color: rgb(29, 29, 29);
+            color: white;
+            border-radius: 5px;
+            margin-left: 5px;
+            
+        }
+
+        #weekdata>div>img {
+            padding-top: 20px;
+            height: 80px;
+            width: 80px;
+            border-radius: 5px;
+            
+        }
+      
+    </style>
+</head>
+
+<body>
+    <div id="test">
+        <input placeholder="Enter The City Name" type="City Name" id="city">
+        <button onclick="getWeather()" style="background-color: aliceblue; color: black;"> Get Weather </button>
+
+
+    </div>
+
+
+    <div id="weekdata">
+
+
+    </div>
+
+    </div>
+
+    <div id="bord">
+
+        <div id="container"> </div>
+        <div id="map"></div>
+
+    </div>
+
+
+
+
+
+
+</body>
+
+</html>
+<script>
+    let container = document.getElementById("container");
+
+    async function getWeather() {
+        try {
+
+            let city = document.getElementById("city").value;
+
+
+
+            // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+            // bbc27318a4f51ff326aa5e3c6cb61f59
+
+
+
+            let res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&cnt=7&appid=bbc27318a4f51ff326aa5e3c6cb61f59&units=metric`);
+
+
+
+            // https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=fcf69e5aaec86662d58d261fa26399b2&units=metric
+
+
+            let data = await res.json();
+
+
+            append(data);
+            week(data.list)
+            // console.log("data", data);
+
+
+        }
+        catch (err) {
+            console.log("err", err)
+        }
+    }
+
+    function append(data) {
+        container.innerHTML = null;
+        map.innerHTML = null;
+
+        let name = document.createElement('h2');
+        name.innerText =  data.city.name;
+
+        let sunrise = document.createElement('H3')
+        sunrise.innerText = "Sun Rise :" + " " + data.city.sunrise
+
+        let sunset = document.createElement('H3')
+        sunset.innerText = "Sun Set :" + " " + data.city.sunset
+
+
+        let longitude = document.createElement("h4")
+        longitude.innerText = "LONGITUDE :" + " " + data.city.coord.lon
+
+        let latitude = document.createElement('h4');
+        latitude.innerText = "LATITUDE :" + " " + data.city.coord.lat
+
+        let iframe = document.createElement("iframe");
+        iframe.src = `https://maps.google.com/maps?q=${data.city.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+        iframe.height = "400px";
+        iframe.width = "400px";
+        map.append(iframe);
+
+        map.append(iframe)
+        container.append(name, sunrise, sunset, longitude, latitude);
+
+
+    }
+
+    let arr = ["Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Sutarday", "Sunday"];
+    let dataimg =
+           ["https://cdn.jim-nielsen.com/ios/512/weather-2019-02-07.png",
+            "https://i.pinimg.com/originals/06/c4/f7/06c4f70ec5931e2342e703e8a3f0a253.png",
+            "https://cdn.jim-nielsen.com/ios/512/weather-2019-02-07.png",
+            "https://s3.envato.com/files/253977601/screens/Logo.png",
+            "https://i.pinimg.com/originals/06/c4/f7/06c4f70ec5931e2342e703e8a3f0a253.png",
+            "https://cdn.jim-nielsen.com/ios/512/weather-atlas-2017-09-19.png",
+            "https://i.pinimg.com/originals/06/c4/f7/06c4f70ec5931e2342e703e8a3f0a253.png"]
+    function week(data) {
+        weekdata.innerHTML = null;
+        var i = 0;
+        data.forEach(function (elem) {
+
+            // console.log(arr[i++])
+
+
+            let div = document.createElement("div")
+
+            let dayname = document.createElement("h3");
+            dayname.innerText = arr[i++]
+
+            let temp = document.createElement("p")
+            temp.innerText = "Temp. :" + " " + elem.main.temp;
+
+            let min_temp = document.createElement("p")
+            min_temp.innerText = "Min Temp. :" + " " + elem.main.temp_min
+
+            let max_temp = document.createElement('p')
+            max_temp.innerText = "Max Temp. :" + " " + elem.main.temp_max
+
+            let wind = document.createElement("p")
+            wind.innerText = "Wind :" + " " + elem.wind.speed
+
+            // let text = document.createElement("h3")
+            // text.innerText="Next Seven Day Data"
+
+            let img = document.createElement("img");
+            img.src = dataimg[i-1];
+
+
+            div.append(img, dayname, temp, min_temp, max_temp, wind);
+            weekdata.append(div);
+        });
+
+    }
+
+
+
+
+</script>
